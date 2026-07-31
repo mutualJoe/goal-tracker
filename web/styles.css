@@ -1,0 +1,347 @@
+:root {
+  --ink: #1a241c;
+  --bark: #2c3a2f;
+  --moss: #3d5a40;
+  --leaf: #6f8f72;
+  --mist: #e7efe6;
+  --fog: #f3f7f2;
+  --sun: #d4a24c;
+  --clay: #b85c38;
+  --line: rgba(26, 36, 28, 0.12);
+  --shadow: 0 18px 50px rgba(26, 36, 28, 0.12);
+  --radius: 18px;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "Figtree", "Segoe UI", sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  font-family: var(--font-body);
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(111, 143, 114, 0.28), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(212, 162, 76, 0.18), transparent 50%),
+    linear-gradient(165deg, var(--fog), #dfe8dd 45%, #d5e0d4);
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.35;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.35'/%3E%3C/svg%3E");
+}
+
+#app {
+  position: relative;
+  min-height: 100vh;
+}
+
+.shell {
+  width: min(920px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: 2.5rem 0 4rem;
+  animation: rise 0.7s ease both;
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 2rem;
+  align-items: end;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 7vw, 4.4rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  color: var(--moss);
+}
+
+.tagline {
+  margin: 0.55rem 0 0;
+  max-width: 22rem;
+  color: var(--bark);
+  opacity: 0.8;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.4rem;
+  padding: 0.3rem;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+.tab {
+  border: 0;
+  background: transparent;
+  color: var(--bark);
+  font: inherit;
+  font-weight: 550;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.tab:hover {
+  transform: translateY(-1px);
+}
+
+.tab.active {
+  background: var(--ink);
+  color: var(--mist);
+}
+
+.status {
+  margin: 0 0 1.25rem;
+  padding: 0.7rem 1rem;
+  border-left: 3px solid var(--sun);
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--bark);
+  animation: fade 0.35s ease;
+}
+
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.stack {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.stack-sm {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.composer,
+.list-section {
+  padding: 1.35rem 1.4rem 1.5rem;
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(10px);
+}
+
+h2 {
+  margin: 0 0 0.85rem;
+  font-family: var(--font-display);
+  font-size: 1.55rem;
+  font-weight: 500;
+}
+
+h3 {
+  margin: 0;
+  font-size: 1.15rem;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+  margin-bottom: 1rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 650;
+  color: var(--bark);
+}
+
+input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  font: inherit;
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--ink);
+}
+
+input:focus {
+  outline: 2px solid rgba(61, 90, 64, 0.35);
+  border-color: var(--leaf);
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+.primary,
+.ghost {
+  border-radius: 999px;
+  padding: 0.7rem 1.15rem;
+  font-weight: 650;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.primary {
+  border: 0;
+  background: var(--moss);
+  color: #f4f8f3;
+}
+
+.primary.small {
+  padding: 0.45rem 0.9rem;
+}
+
+.ghost {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--bark);
+}
+
+.ghost.danger {
+  color: var(--clay);
+}
+
+.primary:hover,
+.ghost:hover {
+  transform: translateY(-1px);
+}
+
+.muted {
+  margin: 0.2rem 0 0.8rem;
+  color: var(--bark);
+  opacity: 0.75;
+}
+
+.fine {
+  font-size: 0.9rem;
+}
+
+.empty {
+  margin: 0;
+  color: var(--bark);
+  opacity: 0.7;
+}
+
+.habit-row,
+.goal-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem 0;
+  border-top: 1px solid var(--line);
+  animation: rise 0.45s ease both;
+}
+
+.habit-row:first-of-type,
+.goal-row:first-of-type {
+  border-top: 0;
+  padding-top: 0.2rem;
+}
+
+.goal-row {
+  grid-template-columns: 1fr auto;
+}
+
+.check {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+  border: 2px solid var(--accent, var(--moss));
+  background: transparent;
+  color: white;
+  font-size: 1.15rem;
+  display: grid;
+  place-items: center;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.check.checked {
+  background: var(--accent, var(--moss));
+  transform: scale(1.05);
+}
+
+.meter {
+  margin-top: 0.55rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: rgba(26, 36, 28, 0.08);
+  overflow: hidden;
+}
+
+.meter-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent, var(--moss)), var(--leaf));
+  border-radius: inherit;
+  transition: width 0.35s ease;
+}
+
+.meter-label {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
+  color: var(--bark);
+  opacity: 0.7;
+}
+
+.goal-actions {
+  display: flex;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+@media (max-width: 720px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .habit-row,
+  .goal-row {
+    grid-template-columns: auto 1fr;
+  }
+
+  .habit-row > .ghost,
+  .goal-actions {
+    grid-column: 1 / -1;
+  }
+}
