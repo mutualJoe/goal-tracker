@@ -20,6 +20,11 @@ The habits view shows how many habits are done today and a streak of consecutive
 export PATH="$HOME/tools/sbt-2.0.4/bin:$PATH"
 sbt 'frontendJS/fastLinkJS; backend/run'
 ```
+To stop
+```
+export PATH="$HOME/tools/sbt-2.0.4/bin:$PATH"
+sbt shutdown
+```
 
 ```bash
 # 1) Build the Scala.js bundle into web/js
