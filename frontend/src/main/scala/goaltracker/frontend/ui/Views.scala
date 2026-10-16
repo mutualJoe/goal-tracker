@@ -26,6 +26,22 @@ object Views:
       ),
       p(cls := "status", child.text <-- AppState.statusVar.signal),
       div(
+        cls := "pulse",
+        child.text <-- AppState.documentVar.signal.map { doc =>
+          val (done, total) = Merge.todayProgress(doc, AppState.todayDate)
+          val streak = Merge.currentStreak(doc, AppState.todayDate)
+          val todayLabel =
+            if total == 0 then "No habits yet"
+            else s"$done / $total done today"
+          val streakLabel =
+            streak match
+              case 0 => "start a streak"
+              case 1 => "1-day streak"
+              case n => s"$n-day streak"
+          s"$todayLabel · $streakLabel"
+        }
+      ),
+      div(
         cls := "panel",
         child <-- AppState.panelVar.signal.map {
           case "goals" => goalsPanel
@@ -71,11 +87,11 @@ object Views:
                 descVar.now(),
                 colorVar.now(),
                 targetVar.now().toIntOption.getOrElse(0)
-              )
-              .left
-              .foreach(AppState.statusVar.set)
-            titleVar.set("")
-            descVar.set("")
+              ) match
+              case Left(err) => AppState.statusVar.set(err)
+              case Right(_) =>
+                titleVar.set("")
+                descVar.set("")
           }
         )
       ),
@@ -149,11 +165,11 @@ object Views:
           onClick --> { _ =>
             val dl = Option(deadlineVar.now().trim).filter(_.nonEmpty)
             AppState
-              .addGoal(titleVar.now(), descVar.now(), targetVar.now().toIntOption.getOrElse(0), unitVar.now(), dl)
-              .left
-              .foreach(AppState.statusVar.set)
-            titleVar.set("")
-            descVar.set("")
+              .addGoal(titleVar.now(), descVar.now(), targetVar.now().toIntOption.getOrElse(0), unitVar.now(), dl) match
+              case Left(err) => AppState.statusVar.set(err)
+              case Right(_) =>
+                titleVar.set("")
+                descVar.set("")
           }
         )
       ),

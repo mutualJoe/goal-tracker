@@ -120,12 +120,23 @@ body::before {
 }
 
 .status {
-  margin: 0 0 1.25rem;
+  margin: 0 0 0.75rem;
   padding: 0.7rem 1rem;
   border-left: 3px solid var(--sun);
   background: rgba(255, 255, 255, 0.4);
   color: var(--bark);
   animation: fade 0.35s ease;
+}
+
+.pulse {
+  display: inline-flex;
+  margin: 0 0 1.25rem;
+  padding: 0.45rem 0.9rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: var(--mist);
+  font-weight: 650;
+  letter-spacing: 0.01em;
 }
 
 @keyframes fade {

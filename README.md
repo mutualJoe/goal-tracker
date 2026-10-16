@@ -10,9 +10,16 @@ Full-stack Scala demo of **local-first** software with optional multi-device syn
 
 The UI works with **no server**. Sign-in and sync are progressive enhancement.
 
+The habits view shows how many habits are done today and a streak of consecutive days with at least one check-in. Today stays open until you check something in, so the streak does not drop to zero first thing in the morning.
+
 ## Quick start
 
 **Requirements:** JDK 17+, [sbt 2.x runner](https://www.scala-sbt.org/download/) (`sbt --script-version` should report 2.0+)
+
+```bash
+export PATH="$HOME/tools/sbt-2.0.4/bin:$PATH"
+sbt 'frontendJS/fastLinkJS; backend/run'
+```
 
 ```bash
 # 1) Build the Scala.js bundle into web/js

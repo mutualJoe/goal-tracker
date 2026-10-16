@@ -47,3 +47,47 @@ class MergeTest extends FunSuite:
     val merged = Merge.mergeDocuments(local, remote)
     assertEquals(merged.habits.map(_.id.value).sorted, List("1", "2"))
   }
+
+  private def checkIn(habitId: String, date: String, done: Boolean = true) =
+    HabitCheckIn(
+      id = CheckInId(s"$habitId-$date"),
+      habitId = HabitId(habitId),
+      date = date,
+      done = done,
+      updatedAt = 1,
+      deleted = false,
+      deviceId = deviceA
+    )
+
+  test("today progress counts completed habits") {
+    val doc = SyncDocument(
+      List(habit("1", "Run", 100, deviceA), habit("2", "Read", 110, deviceA)),
+      List(checkIn("1", "2026-10-16"), checkIn("2", "2026-10-16", done = false)),
+      Nil
+    )
+    assertEquals(Merge.todayProgress(doc, "2026-10-16"), (1, 2))
+  }
+
+  test("streak keeps yesterday when today is still open") {
+    val doc = SyncDocument(
+      List(habit("1", "Run", 100, deviceA)),
+      List(checkIn("1", "2026-10-14"), checkIn("1", "2026-10-15")),
+      Nil
+    )
+    assertEquals(Merge.currentStreak(doc, "2026-10-16"), 2)
+  }
+
+  test("previous day crosses month and leap-day boundaries") {
+    assertEquals(Merge.previousDay("2026-10-01"), "2026-09-30")
+    assertEquals(Merge.previousDay("2024-03-01"), "2024-02-29")
+    assertEquals(Merge.previousDay("2026-03-01"), "2026-02-28")
+  }
+
+  test("streak includes today once a habit is checked") {
+    val doc = SyncDocument(
+      List(habit("1", "Run", 100, deviceA)),
+      List(checkIn("1", "2026-10-15"), checkIn("1", "2026-10-16")),
+      Nil
+    )
+    assertEquals(Merge.currentStreak(doc, "2026-10-16"), 2)
+  }

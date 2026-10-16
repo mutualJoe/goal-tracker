@@ -50,3 +50,45 @@ object Merge:
     weekDates.count { d =>
       checkInForDate(doc, habitId, d).exists(_.done)
     }
+
+  /** Done check-ins today, and how many active habits exist. */
+  def todayProgress(doc: SyncDocument, date: String): (Int, Int) =
+    val habits = activeHabits(doc)
+    val done = habits.count(h => checkInForDate(doc, h.id, date).exists(_.done))
+    (done, habits.size)
+
+  /** Consecutive days with at least one completed check-in.
+    *
+    * Today still counts as open: if nothing is checked yet, the streak
+    * continues from yesterday instead of dropping to zero.
+    */
+  def currentStreak(doc: SyncDocument, today: String): Int =
+    val habits = activeHabits(doc)
+    if habits.isEmpty then 0
+    else
+      def dayDone(date: String): Boolean =
+        habits.exists(h => checkInForDate(doc, h.id, date).exists(_.done))
+
+      val anchor = if dayDone(today) then today else previousDay(today)
+      Iterator.iterate(anchor)(previousDay).take(366).takeWhile(dayDone).length
+
+  /** Previous calendar day for a `YYYY-MM-DD` string. No `java.time` — Scala.js does not link it. */
+  def previousDay(date: String): String =
+    val parts = date.split("-")
+    var year = parts(0).toInt
+    var month = parts(1).toInt
+    var day = parts(2).toInt - 1
+    if day < 1 then
+      month -= 1
+      if month < 1 then
+        month = 12
+        year -= 1
+      day = daysInMonth(year, month)
+    f"$year%04d-$month%02d-$day%02d"
+
+  private def daysInMonth(year: Int, month: Int): Int =
+    val leap = year % 4 == 0 && (year % 100 != 0 || year % 400 == 0)
+    month match
+      case 2               => if leap then 29 else 28
+      case 4 | 6 | 9 | 11  => 30
+      case _               => 31
